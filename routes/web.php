@@ -4,6 +4,9 @@ use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\GoogleController;
+
+Route::post('/google-login', [GoogleController::class, 'login']);
 
 Route::get('/', function () {
     return view('welcome');
