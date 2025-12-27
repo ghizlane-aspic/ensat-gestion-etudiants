@@ -8,7 +8,17 @@
             Profil
         </h2>
     </x-slot>
-
+    <div class="flex flex-col items-center pb-10">
+        @if($user->photo)
+            <img class="w-32 h-32 mb-4 rounded-full shadow-lg object-cover" src="{{ $user->photo }}" alt="Photo de profil">
+        @else
+            <div class="w-32 h-32 mb-4 rounded-full bg-indigo-600 flex items-center justify-center text-white text-4xl font-bold">
+                {{ strtoupper(substr($user->prenom, 0, 1) . substr($user->name, 0, 1)) }}
+            </div>
+        @endif
+        <h5 class="text-xl font-medium text-gray-900">{{ $user->prenom }} {{ $user->name }}</h5>
+        <span class="text-sm text-gray-500">{{ $user->email }}</span>
+    </div>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="bg-white shadow sm:rounded-lg p-6">

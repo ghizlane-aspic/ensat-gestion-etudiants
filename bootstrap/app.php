@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
-            // \App\Http\Middleware\HandleInertiaErrors::class,
+          //  \App\Http\Middleware\HandleInertiaErrors::class,
         ]);
 
         // Enregistrement de notre middleware personnalisé
@@ -22,4 +22,8 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->withProviders([
+        App\Providers\FirebaseServiceProvider::class, // Add this line
+    ])    
+    ->create();

@@ -6,7 +6,6 @@ use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleController;
 
-Route::post('/google-login', [GoogleController::class, 'login']);
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,3 +33,7 @@ Route::middleware(['auth', 'role:etudiant'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Ajout de la route Google
+Route::post('/google-login', [App\Http\Controllers\Auth\GoogleController::class, 'login'])
+    ->name('google.login');

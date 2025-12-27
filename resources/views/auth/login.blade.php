@@ -62,48 +62,51 @@
     </div>
 
     <!-- Scripts Firebase (modulaire v9 compat) -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 
-        const firebaseConfig = {
-            apiKey: "{{ config('services.firebase.api_key') }}",
-            authDomain: "{{ config('services.firebase.auth_domain') }}",
-            projectId: "{{ config('services.firebase.project_id') }}",
-            storageBucket: "{{ config('services.firebase.storage_bucket') }}",
-            messagingSenderId: "{{ config('services.firebase.messaging_sender_id') }}",
-            appId: "{{ config('services.firebase.app_id') }}"
-        };
+<script>
+    const firebaseConfig = {
+        apiKey: "{{ config('services.firebase.api_key') }}",
+        authDomain: "{{ config('services.firebase.auth_domain') }}",
+        projectId: "{{ config('services.firebase.project_id') }}",
+        storageBucket: "{{ config('services.firebase.storage_bucket') }}",
+        messagingSenderId: "{{ config('services.firebase.messaging_sender_id') }}",
+        appId: "{{ config('services.firebase.app_id') }}"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+    firebase.initializeApp(firebaseConfig);
 
-        window.googleSignIn = async function() {
-            const provider = new GoogleAuthProvider();
-            try {
-                const result = await signInWithPopup(auth, provider);
-                const idToken = await result.user.getIdToken();
-
-                const response = await fetch("{{ route('google.login') }}", {
-                    method: "POST",
+    // Fonction globale
+    window.googleSignIn = function() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider)
+            .then((result) => {
+                return result.user.getIdToken();
+            })
+            .then((idToken) => {
+                fetch("{{ route('google.login') }}", {
+                    method: 'POST',
                     headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
                     body: JSON.stringify({ id_token: idToken })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    window.location.href = data.redirect || "{{ route('dashboard') }}";
-                } else {
-                    alert("Erreur : " + data.message);
-                }
-            } catch (error) {
-                console.error(error);
-                alert("Erreur lors de la connexion Google");
-            }
-        };
-    </script>
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = data.redirect || "{{ route('dashboard') }}";
+                    } else {
+                        alert('Erreur connexion : ' + (data.message || 'Inconnue'));
+                    }
+                })
+                .catch(err => console.error('Erreur fetch:', err));
+            })
+            .catch((error) => {
+                console.error('Erreur Google Sign In:', error);
+                alert('Erreur : ' + error.message);
+            });
+    };
+</script>
 </x-guest-layout>
