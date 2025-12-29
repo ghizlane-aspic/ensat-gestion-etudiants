@@ -54,14 +54,14 @@ class GoogleController extends Controller
                     'email' => $email,
                     'password' => Hash::make(Str::random(16)),
                     'role' => 'etudiant', // Par défaut étudiant
-                    'photo' => $photoUrl, // Optionnel : stocker l'URL photo Google
+                    //'photo' => $photoUrl, // Optionnel : stocker l'URL photo Google
                     'email_verified_at' => now(),
                 ]);
             } else {
                 // Si l'utilisateur existe déjà, on peut mettre à jour prénom/photo si besoin
                 $user->update([
                     'prenom' => $prenom ?: $user->prenom,
-                    'photo' => $photoUrl ?: $user->photo,
+                    //'photo' => $photoUrl ?: $user->photo,
                 ]);
             }
 

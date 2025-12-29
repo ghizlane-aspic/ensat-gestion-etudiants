@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
-                    <form action="{{ route('etudiants.store') }}" method="POST">
+                    <form action="{{ route('etudiants.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -48,6 +48,13 @@
                                 <x-input-label for="password_confirmation" :value="'Confirmer le mot de passe'" />
                                 <x-text-input id="password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" required />
                             </div>
+                        </div>
+
+                    <!-- 2. Ajoutez le champ photo -->
+                        <div class="mt-4">
+                            <label>Photo de profil</label>
+                            <input type="file" name="photo" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50">
+                            @error('photo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="flex items-center gap-4 mt-8">

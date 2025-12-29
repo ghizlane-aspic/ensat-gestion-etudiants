@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 });
 
 // Routes admin
@@ -30,6 +31,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::middleware(['auth', 'role:etudiant'])->group(function () {
     Route::get('/profil', [ProfilController::class, 'show'])->name('profil.show');
     Route::post('/profil/update-password', [ProfilController::class, 'updatePassword'])->name('profil.update-password');
+    Route::get('/mon-profil', [ProfilController::class, 'show'])->name('etudiant.profil');
 });
 
 require __DIR__.'/auth.php';

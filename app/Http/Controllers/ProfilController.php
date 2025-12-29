@@ -7,10 +7,41 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfilController extends Controller
 {
+    // public function show()
+    // {
+    //     $user = Auth::user();
+    //     return view('etudiant.profil', compact('user'));
+    // }
+
     public function show()
     {
-        $user = Auth::user();
-        return view('etudiant.profil', compact('user'));
+        $user = auth()->user();
+        // Laravel cherche dans resources/views/ + etudiant/profil.blade.php
+        return view('etudiant.profil', compact('user')); 
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'photo' => 'required|image|max:2048',
+        ]);
+
+        $user = auth()->user();
+        $file = $request->file('photo');
+        $fileName = 'user_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+        $storage = app('firebase.storage');
+        $bucket = $storage->getBucket();
+
+        $bucket->upload(fopen($file->getRealPath(), 'r'), [
+            'name' => 'profils/' . $fileName,
+            'predefinedAcl' => 'publicRead'
+        ]);
+
+        $user->photo = "https://storage.googleapis.com/" . env('FIREBASE_STORAGE_BUCKET') . "/profils/" . $fileName;
+        $user->save();
+
+        return back()->with('success', 'Photo mise à jour');
     }
 
     public function updatePassword(Request $request)

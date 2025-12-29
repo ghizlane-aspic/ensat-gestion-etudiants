@@ -9,12 +9,19 @@
         </h2>
     </x-slot>
     <div class="flex flex-col items-center pb-10">
+
         @if($user->photo)
-            <img class="w-32 h-32 mb-4 rounded-full shadow-lg object-cover" src="{{ $user->photo }}" alt="Photo de profil">
+            <!-- On ajoute storage/ devant le chemin stocké en base -->
+            <img class="w-32 h-32 mb-4 rounded-full shadow-lg object-cover" 
+         src="{{ str_starts_with($user->photo, 'http') ? $user->photo : asset('storage/' . $user->photo) }}" 
+         alt="Photo de profil">
         @else
-            <div class="w-32 h-32 mb-4 rounded-full bg-indigo-600 flex items-center justify-center text-white text-4xl font-bold">
-                {{ strtoupper(substr($user->prenom, 0, 1) . substr($user->name, 0, 1)) }}
-            </div>
+          <div class="relative w-32 h-32 mb-4 rounded-full bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-700 flex items-center justify-center text-white text-4xl font-extrabold tracking-widest shadow-xl ring-4 ring-white">
+              {{ strtoupper(substr($user->prenom, 0, 1) . substr($user->name, 0, 1)) }}
+              
+              <!-- Petit badge décoratif (optionnel) -->
+              <span class="absolute bottom-1 right-1 block h-6 w-6 rounded-full bg-green-400 ring-2 ring-white"></span>
+          </div>
         @endif
         <h5 class="text-xl font-medium text-gray-900">{{ $user->prenom }} {{ $user->name }}</h5>
         <span class="text-sm text-gray-500">{{ $user->email }}</span>

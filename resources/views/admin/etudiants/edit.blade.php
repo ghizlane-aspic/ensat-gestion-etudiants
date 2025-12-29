@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
-                    <form action="{{ route('etudiants.update', $etudiant) }}" method="POST">
+                    <form action="{{ route('etudiants.update', $etudiant) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -37,6 +37,13 @@
                                 <x-input-label for="phone" :value="'Téléphone'" />
                                 <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $etudiant->phone)" />
                                 <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+                            </div>
+
+                        <!-- 2. Ajoutez le champ photo -->
+                            <div class="mt-4">
+                                <label>Photo de profil</label>
+                                <input type="file" name="photo" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50">
+                                @error('photo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                             </div>
                         </div>
 
