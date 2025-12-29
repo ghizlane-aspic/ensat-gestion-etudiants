@@ -1,63 +1,43 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
-
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
-        
-        <!-- Prénom -->
-        <div>
-            <x-input-label for="prenom" :value="__('Prénom')" />
-            <x-text-input id="prenom" class="block mt-1 w-full" type="text" name="prenom" :value="old('prenom')" required autofocus autocomplete="prenom" />
-            <x-input-error :messages="$errors->get('prenom')" class="mt-2" />
+    <div class="flex-1 p-8 lg:p-12 overflow-y-auto max-h-[700px]">
+        <div class="mb-8">
+            <h2 class="text-3xl font-extrabold text-gray-900">Inscription</h2>
+            <p class="text-gray-500">Créez votre compte étudiant</p>
+            <div class="h-1 w-12 bg-ensa-blue mt-2 rounded-full"></div>
         </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <x-input-label for="name" value="Nom" />
+                    <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required />
+                </div>
+                <div>
+                    <x-input-label for="prenom" value="Prénom" />
+                    <x-text-input id="prenom" class="block mt-1 w-full" type="text" name="prenom" :value="old('prenom')" required />
+                </div>
+            </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+            <div class="mt-4">
+                <x-input-label for="email" value="Email Académique" />
+                <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+            </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+            <div class="mt-4">
+                <x-input-label for="password" value="Mot de passe" />
+                <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required />
+            </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <div class="mt-4">
+                <x-input-label for="password_confirmation" value="Confirmer le mot de passe" />
+                <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required />
+            </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-
-        <!-- Séparateur "OU" -->
+            <div class="mt-8">
+                <x-primary-button class="w-full">Créer mon compte</x-primary-button>
+            </div>
+                    <!-- Séparateur "OU" -->
     <div class="mt-6 flex items-center justify-center">
         <div class="border-t border-gray-300 w-full"></div>
         <span class="px-4 bg-white text-gray-500 text-sm">{{ __('OU') }}</span>
@@ -76,6 +56,21 @@
             {{ __('Connexion avec Google') }}
         </button>
     </div>
+        </form>
+
+        <p class="mt-6 text-center text-sm text-gray-600">
+            Déjà inscrit ? <a href="{{ route('login') }}" class="text-ensa-blue font-bold hover:underline">Se connecter</a>
+        </p>
+    </div>
+
+    <!-- Côté Droit : Bandeau -->
+    <div class="hidden lg:flex bg-ensa-blue w-2/5 flex-col items-center justify-center p-12 text-white relative overflow-hidden">
+        <div class="absolute -left-10 -top-10 w-48 h-48 bg-ensa-darkBlue rounded-full opacity-50"></div>
+        <h3 class="text-2xl font-bold relative z-10 text-center">Bienvenue à l'ENSA Tanger</h3>
+        <p class="mt-4 text-blue-100 text-center relative z-10">Rejoignez la plateforme numérique de l'établissement.</p>
+    </div>
+
+
 
     <!-- Scripts Firebase (modulaire v9 compat) -->
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>

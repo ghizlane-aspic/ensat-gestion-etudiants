@@ -58,7 +58,7 @@
                         </div>
 
                         <div class="flex items-center gap-4 mt-8">
-                            <x-primary-button>{{ __('Enregistrer') }}</x-primary-button>
+                            <x-danger-button>{{ __('Enregistrer') }}</x-danger-button>
                             <a href="{{ route('etudiants.index') }}" class="text-gray-600 hover:text-gray-900">
                                 {{ __('Annuler') }}
                             </a>

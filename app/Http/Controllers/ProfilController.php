@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage; 
+
 
 class ProfilController extends Controller
 {
@@ -23,25 +25,25 @@ class ProfilController extends Controller
     public function updateProfile(Request $request)
     {
         $request->validate([
-            'photo' => 'required|image|max:2048',
+            'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $user = auth()->user();
-        $file = $request->file('photo');
-        $fileName = 'user_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
 
-        $storage = app('firebase.storage');
-        $bucket = $storage->getBucket();
+        if ($request->hasFile('photo')) {
+            // Optionnel : supprimer l'ancienne photo du disque si elle n'est pas une URL externe
+            if ($user->photo && !str_starts_with($user->photo, 'http')) {
+                Storage::disk('public')->delete($user->photo);
+            }
 
-        $bucket->upload(fopen($file->getRealPath(), 'r'), [
-            'name' => 'profils/' . $fileName,
-            'predefinedAcl' => 'publicRead'
-        ]);
+            // Sauvegarder la nouvelle photo localement
+            $path = $request->file('photo')->store('profils', 'public');
+            
+            // Mettre à jour la base de données avec le chemin relatif
+            $user->update(['photo' => $path]);
+        }
 
-        $user->photo = "https://storage.googleapis.com/" . env('FIREBASE_STORAGE_BUCKET') . "/profils/" . $fileName;
-        $user->save();
-
-        return back()->with('success', 'Photo mise à jour');
+        return back()->with('success', 'Photo de profil mise à jour avec succès');
     }
 
     public function updatePassword(Request $request)

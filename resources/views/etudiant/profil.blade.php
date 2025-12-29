@@ -23,6 +23,19 @@
               <span class="absolute bottom-1 right-1 block h-6 w-6 rounded-full bg-green-400 ring-2 ring-white"></span>
           </div>
         @endif
+
+            <!-- Formulaire pour changer la photo -->
+    <form action="{{ route('profile.updatePhoto') }}" method="POST" enctype="multipart/form-data" class="flex flex-col items-center">
+        @csrf
+        @method('PATCH')
+        <label class="cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs py-1 px-3 rounded-full border border-gray-300 transition">
+            Changer la photo
+            <input type="file" name="photo" class="hidden" onchange="this.form.submit()">
+        </label>
+        @error('photo')
+            <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+        @enderror
+    </form>
         <h5 class="text-xl font-medium text-gray-900">{{ $user->prenom }} {{ $user->name }}</h5>
         <span class="text-sm text-gray-500">{{ $user->email }}</span>
     </div>
@@ -72,7 +85,7 @@
                     </div>
 
                     <div class="flex items-center gap-4">
-                        <x-primary-button>Enregistrer</x-primary-button>
+                        <x-danger-button>Enregistrer</x-danger-button>
                     </div>
                 </form>
             </div>
