@@ -32,6 +32,7 @@ Route::middleware(['auth', 'role:etudiant'])->group(function () {
     Route::get('/profil', [ProfilController::class, 'show'])->name('profil.show');
     Route::post('/profil/update-password', [ProfilController::class, 'updatePassword'])->name('profil.update-password');
     Route::get('/mon-profil', [ProfilController::class, 'show'])->name('etudiant.profil');
+    Route::patch('/mon-profil/photo', [ProfilController::class, 'updateProfile'])->name('profile.updatePhoto');
 });
 
 require __DIR__.'/auth.php';
