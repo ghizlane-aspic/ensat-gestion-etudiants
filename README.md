@@ -1,59 +1,283 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎓 ENSAT - Système de Gestion des Étudiants
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-## About Laravel
+Application Laravel avec authentification Firebase pour la gestion des étudiants de l'ENSAT.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📋 Table des Matières
+- [Architecture](#🏗️-architecture)
+- [Fonctionnalités](#✨-fonctionnalités)
+- [Installation](#🚀-installation)
+- [Configuration](#⚙️-configuration)
+- [Structure du Projet](#📁-structure-du-projet)
+- [Sécurité](#🔒-sécurité)
+- [Dépannage](#🐛-dépannage)
+- [Contribution](#🤝-contribution)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🏗️ Architecture
 
-## Learning Laravel
+Cette application utilise une architecture d'authentification hybride :
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- **Frontend** : Firebase Authentication (Google OAuth)
+- **Backend** : Laravel Session Authentication
+- **Base de données** : MySQL/SQLite
+- **Rôles** : Admin et Étudiant
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Technologies Utilisées
+- **Laravel 12** - Framework PHP
+- **Firebase Authentication** - Authentification Google OAuth
+- **Kreait Firebase PHP SDK** - Vérification des tokens côté serveur
+- **Laravel Breeze** - Scaffolding d'authentification
+- **Tailwind CSS** - Framework CSS
 
-## Laravel Sponsors
+## ✨ Fonctionnalités
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Pour les Administrateurs
+- ✅ CRUD complet des étudiants (Créer, Lire, Modifier, Supprimer)
+- ✅ Gestion des profils étudiants
+- ✅ Accès à l'espace d'administration protégé
+- ✅ Interface responsive avec Tailwind CSS
 
-### Premium Partners
+### Pour les Étudiants
+- ✅ Connexion via Google (Firebase)
+- ✅ Connexion classique (Email/Mot de passe)
+- ✅ Visualisation du profil personnel
+- ✅ Modification du mot de passe
+- ✅ Réinitialisation du mot de passe oublié
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 🔐 Flux d'Authentification
 
-## Contributing
+### 1. Page de Connexion
+Deux méthodes d'authentification disponibles :
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Méthode A : Connexion classique (Email/Password)**
+```
+Étudiant → Formulaire login → Laravel Auth → Validation → Session → Dashboard
+```
 
-## Code of Conduct
+**Méthode B : Connexion avec Google (Firebase)**
+```
+Étudiant → Bouton Google → Firebase SDK → Google OAuth → JWT Token → Laravel
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 2. Processus de Vérification Firebase
+1. Frontend récupère le JWT de Firebase
+2. JWT envoyé à `/google-login`
+3. Laravel vérifie le token avec Firebase Admin SDK
+4. Création/mise à jour de l'utilisateur en base de données
+5. Ouverture de session Laravel
+6. Redirection vers le dashboard selon le rôle
 
-## Security Vulnerabilities
+## 🚀 Installation
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Prérequis
+- PHP 8.2+
+- Composer
+- Node.js & NPM
+- MySQL ou SQLite
+- Compte Firebase (projet configuré)
 
-## License
+### Étapes d'Installation
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. **Cloner le repository**
+```bash
+git clone <votre-repo>
+cd ensat-gestion-etudiants
+```
+
+2. **Installer les dépendances PHP**
+```bash
+composer install
+```
+
+3. **Installer les dépendances JavaScript**
+```bash
+npm install
+```
+
+4. **Configurer l'environnement**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+5. **Configurer la base de données**
+Éditer `.env` :
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=ensat_gestion
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+6. **Exécuter les migrations**
+```bash
+php artisan migrate
+```
+
+7. **Compiler les assets**
+```bash
+npm run build
+# Ou pour le développement : npm run dev
+```
+
+8. **Lancer le serveur**
+```bash
+php artisan serve
+```
+
+L'application sera accessible sur http://localhost:8000
+
+## ⚙️ Configuration Firebase
+
+### 1. Créer un Projet Firebase
+1. Aller sur [Firebase Console](https://console.firebase.google.com/)
+2. Créer un nouveau projet
+3. Activer Authentication → Google Sign-In
+
+### 2. Télécharger les Credentials
+1. Aller dans Project Settings → Service Accounts
+2. Cliquer sur "Generate new private key"
+3. Télécharger le fichier JSON
+4. Renommer en `ensat-gestion-etudiants-firebase-adminsdk.json`
+5. Placer à la racine du projet
+
+### 3. Configurer les Variables d'Environnement
+Éditer `.env` :
+
+```env
+# Firebase Web Config (pour le frontend)
+FIREBASE_API_KEY=your_api_key
+FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+FIREBASE_PROJECT_ID=your_project_id
+FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+FIREBASE_APP_ID=your_app_id
+
+# Firebase Admin SDK (pour le backend)
+FIREBASE_CREDENTIALS=ensat-gestion-etudiants-firebase-adminsdk.json
+```
+
+### 4. Ajouter les Domaines Autorisés
+Firebase Console → Authentication → Settings  
+Ajouter :
+- `localhost`
+- Votre domaine de production
+
+## 📁 Structure du Projet
+
+```
+ensat-gestion-etudiants/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Auth/
+│   │   │   │   ├── GoogleController.php    # Gestion connexion Google
+│   │   │   │   └── AuthenticatedSessionController.php
+│   │   │   ├── EtudiantController.php      # CRUD étudiants (admin)
+│   │   │   └── ProfilController.php        # Profil étudiant
+│   │   └── Middleware/
+│   │       └── CheckRole.php               # Vérification des rôles
+│   ├── Models/
+│   │   └── User.php                        # Modèle utilisateur
+│   └── Providers/
+│       └── FirebaseServiceProvider.php     # Service Provider Firebase
+├── config/
+│   ├── firebase.php                        # Configuration Firebase Admin SDK
+│   └── services.php                        # Configuration Firebase Web
+├── database/
+│   └── migrations/                         # Migrations de base de données
+├── resources/
+│   └── views/
+│       ├── auth/
+│       │   ├── login.blade.php             # Page de connexion
+│       │   └── forgot-password.blade.php   # Mot de passe oublié
+│       ├── admin/etudiants/                # Vues CRUD admin
+│       └── etudiant/profil.blade.php       # Profil étudiant
+├── routes/
+│   ├── web.php                             # Routes principales
+│   └── auth.php                            # Routes d'authentification
+└── ensat-gestion-etudiants-firebase-adminsdk.json
+```
+
+## 🔒 Sécurité
+
+### Points de Sécurité Implémentés
+- ✅ Vérification cryptographique des tokens Firebase
+- ✅ Middleware de contrôle d'accès basé sur les rôles
+- ✅ Protection CSRF sur tous les formulaires
+- ✅ Rate limiting (5 tentatives de connexion)
+- ✅ Sessions régénérées après connexion
+- ✅ Cookies sécurisés (httpOnly, secure en production)
+
+### Configuration SSL/TLS (Production)
+```php
+// app/Providers/FirebaseServiceProvider.php
+$httpClient = new Client([
+    'verify' => true, // ⚠️ Activer la vérification SSL en production
+]);
+```
+
+## 👥 Rôles et Permissions
+
+### Admin
+- Accès à `/etudiants` (CRUD complet)
+- Peut créer, modifier, supprimer des étudiants
+- Accès au dashboard admin
+
+### Étudiant
+- Accès à `/profil` (lecture seule)
+- Peut modifier son mot de passe
+- Accès au dashboard étudiant
+
+## 🐛 Dépannage
+
+### Erreur cURL 60 (SSL Certificate)
+**Problème** : Laravel ne peut pas vérifier les certificats SSL de Google.
+
+**Solution développement** :
+```php
+// app/Providers/FirebaseServiceProvider.php
+'verify' => false,
+```
+
+**Solution production** :
+- Installer les certificats CA sur le serveur
+- Spécifier le chemin du fichier `cacert.pem` dans `php.ini`
+
+### Token Firebase Invalide
+**Vérifications** :
+1. Le `projectId` dans `.env` correspond au projet Firebase
+2. Le fichier JSON des credentials est présent
+3. Les clés publiques Google sont accessibles
+4. Le token n'est pas expiré (durée : 1 heure)
+
+### Accès Refusé (403)
+**Vérifications** :
+1. L'utilisateur est bien connecté (session active)
+2. Le rôle correspond à la route protégée
+3. Vérifier la colonne `role` dans la table `users`
+
+## 🤝 Contribution
+
+1. Fork le projet
+2. Créer une branche (`git checkout -b feature/AmazingFeature`)
+3. Commit les changements (`git commit -m 'Add some AmazingFeature'`)
+4. Push vers la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrir une Pull Request
+
+
+
+## 📚 Ressources
+
+- [Documentation Laravel](https://laravel.com/docs)
+- [Documentation Firebase](https://firebase.google.com/docs)
+- [Kreait Firebase PHP SDK](https://github.com/kreait/firebase-php)
+- [Laravel Breeze](https://laravel.com/docs/starter-kits#laravel-breeze)
+
